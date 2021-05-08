@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +17,6 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,27 +33,28 @@ public class MainActivity extends AppCompatActivity {
 
         listaCanciones = findViewById(R.id.lista);
 
+        getExternalMediaDirs();
+
         Dexter.withActivity(this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse)
             {
-                musica = BuscarMusica(Environment.getExternalStorageDirectory());
+                musica = BuscarMusica(getExternalMediaDirs());
                 canciones = new String[musica.size()];
                 for(int i = 0; i < musica.size(); i++)
                 {
                     canciones[i] = musica.get(i).getName();
                 }
 
-                ArrayAdapterMusica = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, canciones);
+                ArrayAdapterMusica = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, canciones);
 
                 listaCanciones.setAdapter(ArrayAdapterMusica);
-
-                /*listaCanciones.setOnClickListener(new AdapterView.OnItemClickListener() {
+                listaCanciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<String> parent, View view, int position, long id) {
-                        
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                     }
-                });*/
+                });
             }
 
             @Override
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }).check();
     }
 
-    private ArrayList<File> BuscarMusica(File file)
+    private ArrayList<File> BuscarMusica(File[] file)
     {
         ArrayList<File> MusicaEncontrada = new ArrayList<>();
         File [] files = file.listFiles();

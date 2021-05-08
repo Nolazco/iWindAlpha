@@ -8,21 +8,21 @@
     tools:context=".reproductor">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/caratula"
         android:layout_width="342dp"
         android:layout_height="338dp"
         android:layout_marginStart="34dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/nombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="89dp"
@@ -33,10 +33,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/caratula" />
 
     <SeekBar
-        android:id="@+id/seekBar"
+        android:id="@+id/progreso"
         android:layout_width="340dp"
         android:layout_height="22dp"
         android:layout_marginStart="36dp"
@@ -44,64 +44,64 @@
         android:layout_marginEnd="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/nombre" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/Play_pause"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toStartOf="@+id/detener"
+        app:layout_constraintStart_toEndOf="@+id/repetir"
+        app:layout_constraintTop_toBottomOf="@+id/progreso"
         app:srcCompat="@drawable/reproducir" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/atras"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="9dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintEnd_toStartOf="@+id/repetir"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintTop_toBottomOf="@+id/progreso"
         app:srcCompat="@drawable/anterior" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/adelante"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="65dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintStart_toEndOf="@+id/detener"
+        app:layout_constraintTop_toBottomOf="@+id/progreso"
         app:srcCompat="@drawable/siguiente" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/repetir"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView6"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toStartOf="@+id/Play_pause"
+        app:layout_constraintStart_toEndOf="@+id/atras"
+        app:layout_constraintTop_toBottomOf="@+id/progreso"
         app:srcCompat="@drawable/no_repetir" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/detener"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toStartOf="@+id/adelante"
+        app:layout_constraintStart_toEndOf="@+id/Play_pause"
+        app:layout_constraintTop_toBottomOf="@+id/progreso"
         app:srcCompat="@drawable/detener" />
 </androidx.constraintlayout.widget.ConstraintLayout>
