@@ -3,7 +3,12 @@ package com.carlosnolazco.ayudamediosito;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +23,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,62 +39,37 @@ public class MainActivity extends AppCompatActivity {
 
         listaCanciones = findViewById(R.id.lista);
 
-        getExternalMediaDirs();
-
-        Dexter.withActivity(this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse)
-            {
-                musica = BuscarMusica(getExternalMediaDirs());
-                canciones = new String[musica.size()];
-                for(int i = 0; i < musica.size(); i++)
-                {
-                    canciones[i] = musica.get(i).getName();
-                }
-
-                ArrayAdapterMusica = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, canciones);
-
-                listaCanciones.setAdapter(ArrayAdapterMusica);
-                listaCanciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse)
-            {
-
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken)
-            {
-                permissionToken.continuePermissionRequest();
-            }
-        }).check();
+        getAllAudioFromDevice(this);
     }
 
-    private ArrayList<File> BuscarMusica(File[] file)
-    {
-        ArrayList<File> MusicaEncontrada = new ArrayList<>();
-        File [] files = file.listFiles();
+    public List<AudioModel> getAllAudioFromDevice(final Context context) {
+        final List<AudioModel> tempAudioList = new ArrayList<>();
 
-        for(File currentFiles: files)
-        {
-            if(currentFiles.isDirectory() && !currentFiles.isHidden())
-            {
-                MusicaEncontrada.addAll(BuscarMusica(currentFiles));
-            }else
-            {
-                if(currentFiles.getName().endsWith(".mp3"))
-                {
-                    MusicaEncontrada.add(currentFiles);
-                }
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST,};
+        Cursor c = context.getContentResolver().query(uri, projection, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%utm%"}, null);
+
+        if (c != null) {
+            while (c.moveToNext()) {
+                AudioModel audioModel = new AudioModel();
+                String path = c.getString(0);
+                String name = c.getString(1);
+                String album = c.getString(2);
+                String artist = c.getString(3);
+
+                audioModel.setaName(name);
+                audioModel.setaAlbum(album);
+                audioModel.setaArtist(artist);
+                audioModel.setaPath(path);
+
+                Log.e("Name :" + name, " Album :" + album);
+                Log.e("Path :" + path, " Artist :" + artist);
+
+                tempAudioList.add(audioModel);
             }
+            c.close();
         }
-        return MusicaEncontrada;
+
+        return tempAudioList;
     }
 }
