@@ -1,25 +1,16 @@
 package com.carlosnolazco.ayudamediosito;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.Manifest;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listaCanciones;
     ArrayAdapter<String> ArrayAdapterMusica;
-    String canciones[];
+    String[] canciones;
     ArrayList<File> musica;
 
     @Override
@@ -38,23 +29,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listaCanciones = findViewById(R.id.lista);
-
-        getAllAudioFromDevice(this);
+        getAllAudioFromDevice();
     }
 
-    public List<AudioModel> getAllAudioFromDevice(final Context context) {
+    public List<AudioModel> getAllAudioFromDevice() {
         final List<AudioModel> tempAudioList = new ArrayList<>();
-
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST,};
-        Cursor c = context.getContentResolver().query(uri, projection, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%utm%"}, null);
+        ContentResolver resolver = this.getContentResolver();
 
+        String[] projection = {
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.ARTIST
+        };
+        String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+
+        Cursor c = resolver.query(uri, projection, null, null,
+            MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         if (c != null) {
             while (c.moveToNext()) {
                 AudioModel audioModel = new AudioModel();
                 String path = c.getString(0);
-                String name = c.getString(1);
-                String album = c.getString(2);
+                String album = c.getString(1);
+                String name = c.getString(2);
                 String artist = c.getString(3);
 
                 audioModel.setaName(name);
@@ -62,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 audioModel.setaArtist(artist);
                 audioModel.setaPath(path);
 
-                Log.e("Name :" + name, " Album :" + album);
-                Log.e("Path :" + path, " Artist :" + artist);
-
+				Log.d("PATH: ", path);
+				Log.d("TITLE: ", name);
+				
                 tempAudioList.add(audioModel);
             }
             c.close();
