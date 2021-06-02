@@ -27,17 +27,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listaCanciones;
-    ArrayAdapter<String> ArrayAdapterMusica;
-    String canciones[];
-    ArrayList<File> musica;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        listaCanciones = findViewById(R.id.lista);
 
         getAllAudioFromDevice(this);
     }
@@ -46,8 +39,13 @@ public class MainActivity extends AppCompatActivity {
         final List<AudioModel> tempAudioList = new ArrayList<>();
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST,};
-        Cursor c = context.getContentResolver().query(uri, projection, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%utm%"}, null);
+        String[] projection = {MediaStore.Audio.AudioColumns.DATA,
+                MediaStore.Audio.AudioColumns.TITLE,
+                MediaStore.Audio.AudioColumns.ALBUM,
+                MediaStore.Audio.ArtistColumns.ARTIST,};
+        Cursor c = context.getContentResolver().query(uri, projection,
+                MediaStore.Audio.Media.DATA + " like ? ",
+                new String[]{"%/storage/2D3E-1A15/Music%"}, null);
 
         if (c != null) {
             while (c.moveToNext()) {
