@@ -18,36 +18,25 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listaCanciones;
-    ArrayAdapter<String> ArrayAdapterMusica;
-    String[] canciones;
-    ArrayList<File> musica;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listaCanciones = findViewById(R.id.lista);
-        getAllAudioFromDevice();
+        getAllAudioFromDevice(this);
     }
 
     public List<AudioModel> getAllAudioFromDevice() {
         final List<AudioModel> tempAudioList = new ArrayList<>();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        ContentResolver resolver = this.getContentResolver();
+        String[] projection = {MediaStore.Audio.AudioColumns.DATA,
+                MediaStore.Audio.AudioColumns.TITLE,
+                MediaStore.Audio.AudioColumns.ALBUM,
+                MediaStore.Audio.ArtistColumns.ARTIST,};
+        Cursor c = context.getContentResolver().query(uri, projection,
+                MediaStore.Audio.Media.DATA + " like ? ",
+                new String[]{"%/storage/2D3E-1A15/Music%"}, null);
 
-        String[] projection = {
-            MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.ARTIST
-        };
-        String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-
-        Cursor c = resolver.query(uri, projection, null, null,
-            MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         if (c != null) {
             while (c.moveToNext()) {
                 AudioModel audioModel = new AudioModel();
