@@ -25,7 +25,7 @@ public class reproductor extends AppCompatActivity {
     SeekBar progreso;
     static MediaPlayer reproductor;
     TextView nombre;
-    ArrayList<File> listaDeMusica;
+    ArrayList listaDeMusica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class reproductor extends AppCompatActivity {
         Intent intent = getIntent();
         datosExtras = intent.getExtras();
 
-        listaDeMusica = (ArrayList)datosExtras.getParcelableArrayList("listaDeCanciones");
+        listaDeMusica = (ArrayList)datosExtras.getParcelableArrayList("musica");
         posicion = datosExtras.getInt("posicion", 0);
 
         iniciarReproductor(posicion);
@@ -97,8 +97,8 @@ public class reproductor extends AppCompatActivity {
             reproductor.reset();
         }
 
-        String titulo = listaDeMusica.get(posicion).getName();
-        nombre.setText(titulo);
+        //String titulo = listaDeMusica.get(posicion).getName();
+        //nombre.setText(titulo);
 
         Uri uri = Uri.parse(listaDeMusica.get(posicion).toString());
 

@@ -1,12 +1,16 @@
 package com.carlosnolazco.ayudamediosito;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,24 +19,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     // Codido enviado cuando el permiso es concedido
     private final static int PERMISSION_REQUEST = 1;
-    ListView listaCanciones;
-    ArrayAdapter<String> ArrayAdapterMusica;
-    String[] canciones;
-    ArrayList<File> musica;
+    ArrayList<AudioModel> musica = new ArrayList<>();
+    //RecyclerView lista = findViewById(R.id.lista);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // listaCanciones = findViewById(R.id.lista);
+
+        ListView mostrarMusica = findViewById(R.id.listaM);
 
         // Verificar que tenga permiso al almacenamiento
         if(ContextCompat.checkSelfPermission(this,
@@ -43,18 +47,36 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getAllAudioFromDevice();
         }
+
+        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_list_item_1,musica);
+        mostrarMusica.setAdapter(adaptador);
+
+        mostrarMusica.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                String songName=mostrarMusica.getItemAtPosition(position).toString();
+
+
+
+                Intent intent=new Intent(MainActivity.this,reproductor.class);
+                intent.putExtra("mySongName",songName);
+                intent.putExtra("songPos",position);
+                intent.putExtra("allSong",musica);
+                startActivity(intent);
+            }
+        });
     }
 
-    public List<AudioModel> getAllAudioFromDevice() {
+    public void getAllAudioFromDevice() {
         final List<AudioModel> tempAudioList = new ArrayList<>();
         // Uri de el audio
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         // Info que recoger de las canciones
         String[] projection = {
             MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.ARTIST
         };
         // Condicional que recoge solo las canciones
         String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
@@ -67,14 +89,11 @@ public class MainActivity extends AppCompatActivity {
             while (c.moveToNext()) {
                 AudioModel audioModel = new AudioModel();
                 String path = c.getString(0);
-                String album = c.getString(1);
-                String name = c.getString(2);
-                String artist = c.getString(3);
+                String name = c.getString(1);
 
                 audioModel.setaName(name);
-                audioModel.setaAlbum(album);
-                audioModel.setaArtist(artist);
                 audioModel.setaPath(path);
+                musica.add(audioModel);
 
 				Log.d("PATH: ", path);
 				Log.d("TITLE: ", name);
@@ -83,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
             c.close();
         }
-        return tempAudioList;
     }
 
     // Pedir permiso a el almacenamiento
