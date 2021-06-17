@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         int readPermission = ContextCompat.checkSelfPermission(this,
             Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        return readPermission != PackageManager.PERMISSION_GRANTED;
+        return readPermission == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
