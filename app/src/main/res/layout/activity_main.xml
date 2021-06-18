@@ -8,9 +8,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <ListView
-        android:id="@+id/listaM"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listaF"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 </LinearLayout>
 

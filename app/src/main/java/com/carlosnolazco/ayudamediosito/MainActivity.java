@@ -6,36 +6,50 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private final static int PERMISSION_REQUEST = 1;
-    ArrayList<AudioModel> musica = new ArrayList<>();
-    ListView mostrarMusica;
+    public ArrayList<AudioModel> audioModels;
+    RecyclerView listaF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mostrarMusica = findViewById(R.id.listaM);
+        audioModels = new ArrayList<AudioModel>();
+        listaF = findViewById(R.id.listaF);
+        listaF.setLayoutManager(new LinearLayoutManager(this));
 
         if(externalStorageEnabled())
-           getAllAudioFromDevice();
-        else
-            requestPermissions(new String[] {
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                }, PERMISSION_REQUEST);
+        {
+            getAllAudioFromDevice();
+        }
+        else{
+            requestPermissions(new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+            }, PERMISSION_REQUEST);
+        }
+
+        adapterMusica adapter = new adapterMusica(audioModels);
+        listaF.setAdapter(adapter);
+
     }
 
-    public void getAllAudioFromDevice() {
+    public void getAllAudioFromDevice()
+    {
         // Uri de el audio
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         // Info que recoger de las canciones
@@ -47,22 +61,25 @@ public class MainActivity extends AppCompatActivity {
         String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
         // Hacer la consulta a las canciones
         Cursor c = getContentResolver().query(uri, projection, where, null,
-            MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+                MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         // Conseguir info
-        if (c != null) {
-            while (c.moveToNext()) {
+        if (c != null)
+        {
+            while (c.moveToNext())
+            {
                 AudioModel audioModel = new AudioModel();
                 audioModel.path = c.getString(0);
                 audioModel.name = c.getString(1);
 
-                musica.add(audioModel);
+                audioModels.add(audioModel);
             }
             c.close();
-        } else {
+        } else
+            {
             Toast.makeText(this,
                 "Error al conseguir la musica del dispositovo",
                 Toast.LENGTH_LONG).show();
-        }
+            }
     }
 
     /*
