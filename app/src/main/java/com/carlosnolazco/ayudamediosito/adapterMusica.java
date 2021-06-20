@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class adapterMusica extends RecyclerView.Adapter<adapterMusica.ViewHolderMusica>{
+public class adapterMusica extends RecyclerView.Adapter<adapterMusica.ViewHolderMusica>
+        implements View.OnClickListener{
 
     public ArrayList<AudioModel> audioModels;
+    private View.OnClickListener listener;
 
     public adapterMusica(ArrayList<AudioModel> arrayDos)
     {
@@ -24,6 +26,9 @@ public class adapterMusica extends RecyclerView.Adapter<adapterMusica.ViewHolder
     public ViewHolderMusica onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.elementos, parent, false);
+
+        view.setOnClickListener(this);
+
         return new ViewHolderMusica(view);
     }
 
@@ -35,6 +40,17 @@ public class adapterMusica extends RecyclerView.Adapter<adapterMusica.ViewHolder
     @Override
     public int getItemCount() {
         return audioModels.size();
+    }
+
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(listener != null){
+            listener.onClick(v);
+        }
     }
 
     public class ViewHolderMusica extends RecyclerView.ViewHolder {

@@ -1,11 +1,14 @@
 package com.carlosnolazco.ayudamediosito;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.icu.text.Transliterator;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,8 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.jar.Attributes;
 
 public class MainActivity extends AppCompatActivity {
+
     private final static int PERMISSION_REQUEST = 1;
     public ArrayList<AudioModel> audioModels;
     RecyclerView listaF;
@@ -44,6 +49,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         adapterMusica adapter = new adapterMusica(audioModels);
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(), audioModels.get(listaF.getChildAdapterPosition(v)).name, Toast.LENGTH_SHORT).show();
+
+                int posicion = listaF.getChildAdapterPosition(v);
+                //AudioModel model = audioModels.get(posicion);
+
+                Intent intent = new Intent(MainActivity.this, reproductor.class)
+                        .putExtra("TodaLaMusica", audioModels)
+                        .putExtra("posicion", posicion);
+                startActivity(intent);
+            }
+        });
         listaF.setAdapter(adapter);
 
     }

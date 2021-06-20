@@ -1,6 +1,8 @@
 package com.carlosnolazco.ayudamediosito;
 
-public class AudioModel {
+import java.io.Serializable;
+
+public class AudioModel implements Serializable {
     public String path;
     public String name;
 }
