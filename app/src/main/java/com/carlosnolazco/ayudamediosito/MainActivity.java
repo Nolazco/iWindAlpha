@@ -1,17 +1,8 @@
 package com.carlosnolazco.ayudamediosito;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.icu.text.Transliterator;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,92 +11,38 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.jar.Attributes;
-
 public class MainActivity extends AppCompatActivity {
-
     private final static int PERMISSION_REQUEST = 1;
-    public ArrayList<AudioModel> audioModels;
     RecyclerView listaF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        audioModels = new ArrayList<AudioModel>();
         listaF = findViewById(R.id.listaF);
-        listaF.setLayoutManager(new LinearLayoutManager(this));
 
-        if(externalStorageEnabled())
-        {
-            getAllAudioFromDevice();
-        }
-        else{
+        if(!externalStorageEnabled()) {
             requestPermissions(new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE
             }, PERMISSION_REQUEST);
-        }
-
-        adapterMusica adapter = new adapterMusica(audioModels);
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), audioModels.get(listaF.getChildAdapterPosition(v)).name, Toast.LENGTH_SHORT).show();
-
-                int posicion = listaF.getChildAdapterPosition(v);
-                //AudioModel model = audioModels.get(posicion);
-
-                Intent intent = new Intent(MainActivity.this, reproductor.class)
-                        .putExtra("TodaLaMusica", audioModels)
-                        .putExtra("posicion", posicion);
-                startActivity(intent);
-            }
-        });
-        listaF.setAdapter(adapter);
-
+        } else
+            init();
     }
 
-    public void getAllAudioFromDevice()
-    {
-        // Uri de el audio
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        // Info que recoger de las canciones
-        String[] projection = {
-            MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.TITLE,
-        };
-        // Condicional que recoge solo las canciones
-        String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        // Hacer la consulta a las canciones
-        Cursor c = getContentResolver().query(uri, projection, where, null,
-                MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
-        // Conseguir info
-        if (c != null)
-        {
-            while (c.moveToNext())
-            {
-                AudioModel audioModel = new AudioModel();
-                audioModel.path = c.getString(0);
-                audioModel.name = c.getString(1);
+    public void init() {
+        MusicServ.init();
+        MusicServ.getSongs(this);
 
-                audioModels.add(audioModel);
-            }
-            c.close();
-        } else
-            {
-            Toast.makeText(this,
-                "Error al conseguir la musica del dispositovo",
-                Toast.LENGTH_LONG).show();
-            }
+        AdapterMusica adapter = new AdapterMusica(MusicServ.canciones);
+        listaF.setLayoutManager(new LinearLayoutManager(this));
+        listaF.setHasFixedSize(true);
+        listaF.setAdapter(adapter);
     }
 
     /*
      * COSAS RELACIONADAS CON EL PERMISO DE
      * ACCEDER A LOS ARCHIVOS
      */
-
     public boolean externalStorageEnabled() {
         int readPermission = ContextCompat.checkSelfPermission(this,
             Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -126,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             if(externalStorageEnabled()) {
                 Toast.makeText(this, "Permiso concedido",
                     Toast.LENGTH_LONG).show();
-                getAllAudioFromDevice();
+                MusicServ.init();
             } else {
                 Toast.makeText(this, "Permiso no concedido",
                     Toast.LENGTH_LONG).show();

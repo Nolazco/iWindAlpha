@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">iWind</string>
+    <string name="cancion">Cancion</string>
+    <string name="ruta">Ruta</string>
+    <string name="nombre_de_la_cancion">Nombre de la cancion</string>
+    <string name="Todo">TODO</string>
+    <string name="primera">Si es la primera vez que inica la app debe de reiniciar la misma para actialuzar la lista</string>
 </resources>

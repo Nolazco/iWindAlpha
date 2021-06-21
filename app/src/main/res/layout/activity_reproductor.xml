@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".reproductor">
+    tools:context=".ReproductorActivity">
 
     <ImageView
         android:id="@+id/caratula"
@@ -19,7 +20,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="@string/Todo" />
 
     <TextView
         android:id="@+id/nombre"
@@ -28,7 +30,7 @@
         android:layout_marginStart="89dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="89dp"
-        android:text="Nombre de la cancion"
+        android:text="@string/nombre_de_la_cancion"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,11 +44,13 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="35dp"
+        android:max="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nombre" />
 
-    <ImageView
+    <ImageButton
+        android:background="@null"
         android:id="@+id/Play_pause"
         android:layout_width="45dp"
         android:layout_height="40dp"
@@ -56,11 +60,13 @@
         app:layout_constraintEnd_toStartOf="@+id/detener"
         app:layout_constraintStart_toEndOf="@+id/repetir"
         app:layout_constraintTop_toBottomOf="@+id/progreso"
-        app:srcCompat="@drawable/reproducir" />
+        app:srcCompat="@drawable/reproducir"
+        android:contentDescription="@string/Todo" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/atras"
         android:layout_width="45dp"
+        android:background="@null"
         android:layout_height="40dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="39dp"
@@ -68,40 +74,47 @@
         app:layout_constraintEnd_toStartOf="@+id/repetir"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progreso"
-        app:srcCompat="@drawable/anterior" />
+        app:srcCompat="@drawable/anterior"
+        android:contentDescription="@string/Todo" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/adelante"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginTop="39dp"
+        android:background="@null"
         android:layout_marginEnd="65dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detener"
         app:layout_constraintTop_toBottomOf="@+id/progreso"
-        app:srcCompat="@drawable/siguiente" />
+        app:srcCompat="@drawable/siguiente"
+        android:contentDescription="@string/Todo" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/repetir"
         android:layout_width="45dp"
         android:layout_height="40dp"
+        android:background="@null"
         android:layout_marginStart="12dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@+id/Play_pause"
         app:layout_constraintStart_toEndOf="@+id/atras"
         app:layout_constraintTop_toBottomOf="@+id/progreso"
-        app:srcCompat="@drawable/no_repetir" />
+        app:srcCompat="@drawable/no_repetir"
+        android:contentDescription="@string/Todo" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/detener"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="39dp"
+        android:background="@null"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@+id/adelante"
         app:layout_constraintStart_toEndOf="@+id/Play_pause"
         app:layout_constraintTop_toBottomOf="@+id/progreso"
-        app:srcCompat="@drawable/detener" />
+        app:srcCompat="@drawable/detener"
+        android:contentDescription="@string/Todo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
