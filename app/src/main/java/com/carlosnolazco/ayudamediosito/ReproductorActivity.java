@@ -110,9 +110,9 @@ public class ReproductorActivity extends AppCompatActivity {
 
     public void changeButton () {
         if (MusicServ.player.isPlaying())
-            pause.setImageResource(R.drawable.reproducir);
+            pause.setBackgroundResource(R.drawable.pausa);
         else
-            pause.setImageResource(R.drawable.pausa);
+            pause.setBackgroundResource(R.drawable.reproducir);
     }
 
     public SeekBar.OnSeekBarChangeListener changeListener =
